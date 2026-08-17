@@ -1,0 +1,11 @@
+### 依存関係・ビルド成果物
+
+node_modules/
+dist/
+build/
+.gradle/
+
+### その他
+
+.DS_Store
+*.log

@@ -1,0 +1,26 @@
+{
+  "name": "book-hub",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "scripts": {
+    "format:front": "npm run format --workspace=frontend",
+    "format:backend": "cd backend && gradlew spotlessApply",
+    "format:all": "npm run format:front && npm run format:backend",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0"
+  },
+  "lint-staged": {
+    "*.java": [
+      "./gradlew spotlessApply"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "npx prettier --write"
+    ]
+  }
+}
