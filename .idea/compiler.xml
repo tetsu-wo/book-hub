@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel target="21">
+      <module name="book-hub" target="21" />
+      <module name="book-hub.main" target="21" />
+      <module name="book-hub.test" target="21" />
+      <module name="bookhub" target="21" />
+      <module name="bookhub.main" target="21" />
+      <module name="bookhub.test" target="21" />
+      <module name="com.example.book-hub.main" target="21" />
+      <module name="com.example.book-hub.test" target="21" />
+      <module name="com.example.bookhub.main" target="21" />
+      <module name="com.example.bookhub.test" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-parameters" />
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="book-hub" options="-parameters" />
+      <module name="book-hub.main" options="-parameters" />
+      <module name="book-hub.test" options="-parameters" />
+      <module name="bookhub" options="-parameters" />
+      <module name="bookhub.main" options="-parameters" />
+      <module name="bookhub.test" options="-parameters" />
+      <module name="com.example.book-hub.main" options="-parameters" />
+      <module name="com.example.book-hub.test" options="-parameters" />
+      <module name="com.example.bookhub.main" options="-parameters" />
+      <module name="com.example.bookhub.test" options="-parameters" />
+    </option>
+  </component>
+</project>
