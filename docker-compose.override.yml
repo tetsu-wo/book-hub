@@ -1,0 +1,44 @@
+services:
+  db:
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_ROOT_PASSWORD
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql # 名前付きボリュームでデータを死守
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    command: ./gradlew bootRun --no-daemon
+    env_file:
+      - .env
+    environment:
+      - SPRING_SECURITY_USER_NAME=user
+      - SPRING_SECURITY_USER_PASSWORD=password
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      target: deps
+    command: npm run dev
+    ports:
+      - "3000:3000"
+    env_file:
+      - frontend/.env.local
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - app-network
+volumes:
+  db_data:

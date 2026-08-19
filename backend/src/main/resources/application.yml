@@ -2,6 +2,16 @@ spring:
   application:
     name: backend
 
+  datasource:
+    hikari:
+      initialization-fail-timeout: 60000
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
 springdoc:
   api-docs:
     path: /v3/api-docs

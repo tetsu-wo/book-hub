@@ -1,0 +1,44 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: my_mysql
+    restart: always
+    env_file:
+      - .env
+    healthcheck:
+      # 【【確認】】パスワード直書きの為、直書きしない方法を検討gitする必要があり！！！
+      test: ["CMD", "mysql", "-e", "SELECT 1;"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s # 初期化の猶予期間
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend # backendフォルダのDockerfileをビルド
+      dockerfile: Dockerfile
+    command: java -jar build/libs/app.jar
+    container_name: my_backend
+    env_file:
+      - .env
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile # 💡 Dockerfileの「どのステージ」まで実行するかを指定する
+    command: npm run start
+    container_name: my_frontend
+    env_file:
+      - frontend/.env.local
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
