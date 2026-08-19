@@ -5,8 +5,7 @@ COPY . .
 
 # --- 開発環境用（devモード） ---
 FROM base AS dev
-CMD ["./gradlew", "bootRun", "-x", "test", "--args=--spring.profiles.active=dev"]
-
+CMD ./gradlew bootRun -x test --args="--spring.profiles.active=dev"
 # --- 本番環境のビルド用（ご提示いただいた部分） ---
 FROM base AS build
 RUN ./gradlew bootJar -x test
