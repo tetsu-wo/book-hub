@@ -38,6 +38,7 @@ jobs:
           echo "MYSQL_PASSWORD=${MYSQL_PASSWORD}" >> .env
           echo "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}" >> .env
           touch frontend/.env.local
+          chmod +x backend/gradlew
           docker compose up --build -d
 
       - name: Wait for Database Initialization
