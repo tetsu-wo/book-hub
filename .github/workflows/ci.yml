@@ -80,6 +80,8 @@ jobs:
 
           # 3. Springのコンテナに入って、バックエンドのテストを実行
       - name: Run Backend Tests
+        env:
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx2g"
         run: docker compose exec -T backend ./gradlew test
 
       - name: Check Frontend Container Status
