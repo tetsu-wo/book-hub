@@ -110,6 +110,9 @@ jobs:
           cd backend
           ./gradlew test
 
+      - name: Build Check for Production
+        run: docker compose build backend frontend
+
       # 6. 後片付け
       - name: Stop Containers
         if: always() # 途中でエラーが起きても必ず実行する
