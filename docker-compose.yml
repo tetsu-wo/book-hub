@@ -25,6 +25,10 @@ services:
       - .env
     networks:
       - app-network
+    deploy:
+      resources:
+        limits:
+          memory: 3g
 
   frontend:
     build:
