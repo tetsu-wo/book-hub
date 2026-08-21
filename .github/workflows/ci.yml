@@ -75,8 +75,11 @@ jobs:
       # 5. フロントエンドの検証（型同期やビルドが成功して、コンテナが生きているか確認）
 
       - name: Run Frontend Tests
+        run: docker compose exec -T frontend npm run test
+
+      - name: Stop Frontend to save memory
         run:
-          docker compose exec -T frontend npm run test
+          docker compose stop frontend
 
           # 3. Springのコンテナに入って、バックエンドのテストを実行
       - name: Run Backend Tests
