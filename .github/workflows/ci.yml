@@ -57,6 +57,13 @@ jobs:
           done
           echo "Backend failed to start"
           exit 1
+      - name: Debug Docker Status and Logs
+        if: always() # 30秒待機がエラーで終わっても、必ずこのステップを実行する設定
+        run: |
+          echo "=== Container Status ==="
+          docker compose ps
+          echo "=== Backend Container Logs ==="
+          docker compose logs backend
 
       # 4. バックエンドの動作確認（必要に応じて追加）
       # ※もしテストコードを走らせたい場合は、コンテナ内で実行させます
