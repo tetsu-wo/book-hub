@@ -77,16 +77,6 @@ jobs:
       - name: Run Frontend Tests
         run: docker compose exec -T frontend npm run test
 
-      - name: Stop Frontend to save memory
-        run:
-          docker compose stop frontend
-
-          # 3. Springのコンテナに入って、バックエンドのテストを実行
-      - name: Run Backend Tests
-        run: |
-          docker compose exec -T backend env GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx1536m" ./gradlew test
-          docker compose exec -T backend ./gradlew test
-
       - name: Check Frontend Container Status
         run: |
           if [ "$(docker inspect -f '{{.State.Running}}' my_frontend)" != "true" ]; then
@@ -94,6 +84,31 @@ jobs:
             docker compose logs frontend
             exit 1
           fi
+
+      # 1. フロントエンドのテストが終わった後、一度コンテナをすべて落としてメモリを完全クリア
+      - name: Down Docker Compose
+        run: docker compose down
+
+      # 2. データベース（db）コンテナだけを起動する（バックエンドコンテナは起動しない！）
+      - name: Start Database Only
+        run: docker compose up -d db
+
+      # 3. GitHub Actions（ホスト側）に Java をセットアップする
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21" # ※お使いのJavaバージョン（17や21など）に合わせてください
+          distribution: "temurin"
+          cache: "gradle" # Gradleの依存関係をキャッシュして2回目以降を爆速にする
+
+      # 4. ホスト側で直接テストを実行する（Dockerの無駄なメモリを一切消費しない）
+      - name: Run Backend Tests on Host
+        env:
+          # ホスト側の潤沢なメモリを最大3GBまで贅沢に割り当てる
+          GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.jvmargs=-Xmx3g"
+        run: |
+          cd backend
+          ./gradlew test
 
       # 6. 後片付け
       - name: Stop Containers
