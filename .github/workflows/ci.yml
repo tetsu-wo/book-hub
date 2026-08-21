@@ -45,6 +45,19 @@ jobs:
           echo "Waiting 25 seconds for MySQL to be fully ready..."
           sleep 25
 
+      - name: Wait for backend to be ready
+        run: |
+          for i in {1..30}; do
+            if [ "$(docker compose ps --format json | grep '"Service":"backend"' | grep '"State":"running"')" ]; then
+              echo "Backend is running!"
+              exit 0
+            fi
+            echo "Waiting for backend..."
+            sleep 1
+          done
+          echo "Backend failed to start"
+          exit 1
+
       # 4. バックエンドの動作確認（必要に応じて追加）
       # ※もしテストコードを走らせたい場合は、コンテナ内で実行させます
       #      - name: Run Backend Tests inside Container
@@ -63,7 +76,6 @@ jobs:
 
       - name: Check Frontend Container Status
         run: |
-          # フロントエンドコンテナが正常に起動（Up）しているかステータスを確認
           if [ "$(docker inspect -f '{{.State.Running}}' my_frontend)" != "true" ]; then
             echo "Frontend container is not running!"
             docker compose logs frontend
